@@ -8,13 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0519B7E5251FC33B00BC88E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B7E4251FC33B00BC88E3 /* AppDelegate.swift */; };
-		0519B7E7251FC33B00BC88E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B7E6251FC33B00BC88E3 /* SceneDelegate.swift */; };
-		0519B7E9251FC33B00BC88E3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B7E8251FC33B00BC88E3 /* ViewController.swift */; };
-		0519B7EC251FC33B00BC88E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0519B7EA251FC33B00BC88E3 /* Main.storyboard */; };
 		0519B7EE251FC33E00BC88E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0519B7ED251FC33E00BC88E3 /* Assets.xcassets */; };
 		0519B7F1251FC33E00BC88E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0519B7EF251FC33E00BC88E3 /* LaunchScreen.storyboard */; };
 		0519B7FC251FC33E00BC88E3 /* TabOfSafariLikeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B7FB251FC33E00BC88E3 /* TabOfSafariLikeTests.swift */; };
 		0519B807251FC33F00BC88E3 /* TabOfSafariLikeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B806251FC33F00BC88E3 /* TabOfSafariLikeUITests.swift */; };
+		0519B822251FC64900BC88E3 /* MutableTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519B821251FC64900BC88E3 /* MutableTab.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +35,6 @@
 /* Begin PBXFileReference section */
 		0519B7E1251FC33B00BC88E3 /* TabOfSafariLike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabOfSafariLike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0519B7E4251FC33B00BC88E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0519B7E6251FC33B00BC88E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0519B7E8251FC33B00BC88E3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		0519B7EB251FC33B00BC88E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0519B7ED251FC33E00BC88E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0519B7F0251FC33E00BC88E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0519B7F2251FC33E00BC88E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +44,7 @@
 		0519B802251FC33F00BC88E3 /* TabOfSafariLikeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TabOfSafariLikeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0519B806251FC33F00BC88E3 /* TabOfSafariLikeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabOfSafariLikeUITests.swift; sourceTree = "<group>"; };
 		0519B808251FC33F00BC88E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0519B821251FC64900BC88E3 /* MutableTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableTab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,12 +96,10 @@
 			isa = PBXGroup;
 			children = (
 				0519B7E4251FC33B00BC88E3 /* AppDelegate.swift */,
-				0519B7E6251FC33B00BC88E3 /* SceneDelegate.swift */,
-				0519B7E8251FC33B00BC88E3 /* ViewController.swift */,
-				0519B7EA251FC33B00BC88E3 /* Main.storyboard */,
 				0519B7ED251FC33E00BC88E3 /* Assets.xcassets */,
 				0519B7EF251FC33E00BC88E3 /* LaunchScreen.storyboard */,
 				0519B7F2251FC33E00BC88E3 /* Info.plist */,
+				0519B821251FC64900BC88E3 /* MutableTab.swift */,
 			);
 			path = TabOfSafariLike;
 			sourceTree = "<group>";
@@ -233,7 +227,6 @@
 			files = (
 				0519B7F1251FC33E00BC88E3 /* LaunchScreen.storyboard in Resources */,
 				0519B7EE251FC33E00BC88E3 /* Assets.xcassets in Resources */,
-				0519B7EC251FC33B00BC88E3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,9 +251,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0519B7E9251FC33B00BC88E3 /* ViewController.swift in Sources */,
+				0519B822251FC64900BC88E3 /* MutableTab.swift in Sources */,
 				0519B7E5251FC33B00BC88E3 /* AppDelegate.swift in Sources */,
-				0519B7E7251FC33B00BC88E3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,14 +288,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0519B7EA251FC33B00BC88E3 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0519B7EB251FC33B00BC88E3 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0519B7EF251FC33E00BC88E3 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
