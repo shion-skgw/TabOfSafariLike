@@ -9,13 +9,13 @@ import UIKit
 
 final class MutableTabController: UIViewController {
 
-    weak var tabs: TabView!
-    weak var container: UIView!
+    private(set) weak var tabContainer: TabView!
+    private(set) weak var viewContainer: UIView!
 
-    var tabHeight: CGFloat = UIFont.systemFontSize * 2
+    private(set) var tabHeight: CGFloat = UIFont.systemFontSize * 2
 
-    var currentTagNumber = 0
-    var nextTagNumber: Int {
+    private var currentTagNumber = 0
+    private var nextTagNumber: Int {
         currentTagNumber += 1
         return currentTagNumber
     }
@@ -25,18 +25,18 @@ final class MutableTabController: UIViewController {
 
         super.viewDidLoad()
 
-        let tabs = TabView()
-        tabs.showsVerticalScrollIndicator = false
-        tabs.showsHorizontalScrollIndicator = false
-        tabs.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
-        tabs.tabContainer.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
-        view.addSubview(tabs)
-        self.tabs = tabs
+        let tabContainer = TabView()
+        tabContainer.showsVerticalScrollIndicator = false
+        tabContainer.showsHorizontalScrollIndicator = false
+        tabContainer.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+        tabContainer.tabContainer.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
+        view.addSubview(tabContainer)
+        self.tabContainer = tabContainer
 
-        let container = UIView()
-        container.backgroundColor = UIColor(white: 0.6, alpha: 1.0)
-        view.addSubview(container)
-        self.container = container
+        let viewContainer = UIView()
+        viewContainer.backgroundColor = UIColor(white: 0.6, alpha: 1.0)
+        view.addSubview(viewContainer)
+        self.viewContainer = viewContainer
 
 //        print("\(type(of: self)): \(#function) end")
     }
@@ -46,78 +46,71 @@ final class MutableTabController: UIViewController {
 
         super.viewDidLayoutSubviews()
 
-        tabs.frame = CGRect(origin: .zero, size: view.bounds.size)
-        tabs.frame.size.height = tabHeight
+        tabContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
+        tabContainer.frame.size.height = tabHeight
 
-        container.frame = CGRect(origin: .zero, size: view.bounds.size)
-        container.frame.origin.y += tabHeight
-        container.frame.size.height -= tabHeight
+        viewContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
+        viewContainer.frame.origin.y += tabHeight
+        viewContainer.frame.size.height -= tabHeight
 
 //        print("\(type(of: self)): \(#function) end")
     }
 
     @objc func selectTab(sender: TabItem) {
-        print("\(type(of: self)): \(#function) sender=\(sender.tag)")
-
-        tabs.tabContainer.subviews.forEach({ ($0 as? TabItem)?.isActive = $0.tag == sender.tag })
-        container.subviews.forEach({ $0.isHidden = $0.tag != sender.tag })
-
-        print("\(type(of: self)): \(#function) viewController=\(children.count), container=\(container.subviews.count)")
+        tabContainer.tabItems.forEach({ $0.isActive = $0.tag == sender.tag })
+        viewContainer.subviews.forEach({ $0.isHidden = $0.tag != sender.tag })
     }
 
     @objc func closeTab(sender: UIButton) {
-        print("\(type(of: self)): \(#function) sender=\(sender.tag)")
-
-        guard let tab = tabs.tabContainer.subviews.filter({ $0.tag == sender.tag }).first as? TabItem,
+        guard let tabItem = tabContainer.tabItems.filter({ $0.tag == sender.tag }).first,
                 let child = children.filter({ $0.view.tag == sender.tag }).first else {
             return
         }
-        tabs.remove(item: tab)
+
+        tabContainer.remove(item: tabItem)
         child.willMove(toParent: nil)
         child.view.removeFromSuperview()
         child.removeFromParent()
 
-        if container.subviews.filter({ !$0.isHidden }).isEmpty,
-                let lastAddView = container.subviews.max(by: { $0.tag < $1.tag }) {
+        if viewContainer.subviews.filter({ !$0.isHidden }).isEmpty,
+                let lastAddView = viewContainer.subviews.max(by: { $0.tag < $1.tag }) {
             lastAddView.isHidden = false
-            tabs.tabContainer.subviews.forEach({ ($0 as? TabItem)?.isActive = $0.tag == lastAddView.tag })
+            tabContainer.tabItems.forEach({ $0.isActive = $0.tag == lastAddView.tag })
         }
-
-        print("\(type(of: self)): \(#function) viewController=\(children.count), container=\(container.subviews.count)")
     }
 
     func addTeb(title: String, viewController: UIViewController) {
-        print("\(type(of: self)): \(#function) title=\(title)")
-
         let tagNumber = nextTagNumber
 
         // Add child, sub view
         viewController.view.tag = tagNumber
         addChild(viewController)
-        container.addSubview(viewController.view)
+        viewContainer.addSubview(viewController.view)
         viewController.didMove(toParent: self)
 
         // Add tab
-        let tab = TabItem(frame: .zero)
-        tab.set(title: title, font: .systemFont(ofSize: UIFont.systemFontSize), fontColor: .black)
-        tab.set(activeColor: UIColor(white: 0.5, alpha: 1.0), inactiveColor: UIColor(white: 0.3, alpha: 1.0))
-        tab.set(tabHeight: tabHeight)
-        tab.set(tagNumber: tagNumber)
-        tab.addTarget(self, action: #selector(selectTab(sender:)), for: .touchUpInside)
-        tab.closeButton.addTarget(self, action: #selector(closeTab(sender:)), for: .touchUpInside)
-        tabs.add(item: tab)
+        let tabItem = TabItem(frame: .zero)
+        tabItem.set(title: title, font: .systemFont(ofSize: UIFont.systemFontSize), fontColor: .black)
+        tabItem.set(active: UIColor(white: 0.5, alpha: 1.0), inactive: UIColor(white: 0.3, alpha: 1.0))
+        tabItem.set(tabHeight: tabHeight)
+        tabItem.set(tagNumber: tagNumber)
+        tabItem.addTarget(self, action: #selector(selectTab(sender:)), for: .touchUpInside)
+        tabItem.closeButton.addTarget(self, action: #selector(closeTab(sender:)), for: .touchUpInside)
+        tabContainer.add(item: tabItem)
 
-        tabs.tabContainer.subviews.forEach({ ($0 as? TabItem)?.isActive = $0.tag == tagNumber })
-        container.subviews.forEach({ $0.isHidden = $0.tag != tagNumber })
-
-        print("\(type(of: self)): \(#function) viewController=\(children.count), container=\(container.subviews.count)")
+        tabContainer.tabItems.forEach({ $0.isActive = $0.tag == tagNumber })
+        viewContainer.subviews.forEach({ $0.isHidden = $0.tag != tagNumber })
     }
 
 }
 
 final class TabView: UIScrollView {
 
-    weak var tabContainer: UIStackView!
+    private(set) weak var tabContainer: UIStackView!
+
+    var tabItems: [TabItem] {
+        tabContainer.subviews.compactMap({ $0 as? TabItem })
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -157,11 +150,11 @@ final class TabView: UIScrollView {
 
 final class TabItem: UIButton {
 
-    let horizontalMargin: CGFloat = 6
-    var tabHeight: CGFloat = UIFont.systemFontSize * 2
-    var activeColor: UIColor = .white
-    var inactiveColor: UIColor = .white
-    weak var closeButton: UIButton!
+    private let horizontalMargin: CGFloat = 6
+    private var tabHeight: CGFloat = UIFont.systemFontSize * 2
+    private var activeColor: UIColor = .white
+    private var inactiveColor: UIColor = .white
+    private(set) weak var closeButton: UIButton!
 
     var isActive: Bool = true {
         didSet {
@@ -177,7 +170,7 @@ final class TabItem: UIButton {
         super.init(frame: frame)
 
         let closeButton = UIButton(type: .close)
-        addSubview(closeButton)
+        self.addSubview(closeButton)
         self.closeButton = closeButton
     }
 
@@ -213,10 +206,10 @@ final class TabItem: UIButton {
         self.setAttributedTitle(title, for: .normal)
     }
 
-    func set(activeColor: UIColor, inactiveColor: UIColor) {
-        self.activeColor = activeColor
-        self.inactiveColor = inactiveColor
-        self.backgroundColor = isActive ? activeColor : inactiveColor
+    func set(active: UIColor, inactive: UIColor) {
+        self.activeColor = active
+        self.inactiveColor = inactive
+        self.backgroundColor = isActive ? active : inactive
     }
 
     func set(tabHeight: CGFloat) {
