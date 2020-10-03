@@ -1,0 +1,3 @@
+# TabOfSafariLike
+
+![](./sample.gif)
