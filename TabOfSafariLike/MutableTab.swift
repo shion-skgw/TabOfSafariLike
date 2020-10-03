@@ -21,8 +21,6 @@ final class MutableTabController: UIViewController {
     }
 
     override func viewDidLoad() {
-//        print("\(type(of: self)): \(#function) start")
-
         super.viewDidLoad()
 
         let tabContainer = TabView()
@@ -37,13 +35,9 @@ final class MutableTabController: UIViewController {
         viewContainer.backgroundColor = UIColor(white: 0.6, alpha: 1.0)
         view.addSubview(viewContainer)
         self.viewContainer = viewContainer
-
-//        print("\(type(of: self)): \(#function) end")
     }
 
     override func viewDidLayoutSubviews() {
-//        print("\(type(of: self)): \(#function) start")
-
         super.viewDidLayoutSubviews()
 
         tabContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
@@ -52,8 +46,6 @@ final class MutableTabController: UIViewController {
         viewContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
         viewContainer.frame.origin.y += tabHeight
         viewContainer.frame.size.height -= tabHeight
-
-//        print("\(type(of: self)): \(#function) end")
     }
 
     @objc func selectTab(sender: TabItem) {
