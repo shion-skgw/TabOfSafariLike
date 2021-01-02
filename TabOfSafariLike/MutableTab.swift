@@ -38,13 +38,14 @@ final class MutableTabController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        tabContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
-        tabContainer.frame.size.height = tabHeight
-        tabContainer.container.frame.size.height = tabHeight
+        var tabContainerFrame = CGRect(origin: .zero, size: view.bounds.size)
+        tabContainerFrame.size.height = tabHeight
+        tabContainer.frame = tabContainerFrame
 
-        viewContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
-        viewContainer.frame.origin.y += tabHeight
-        viewContainer.frame.size.height -= tabHeight
+        var viewContainerFrame = CGRect(origin: .zero, size: view.bounds.size)
+        viewContainerFrame.origin.y += tabHeight
+        viewContainerFrame.size.height -= tabHeight
+        viewContainer.frame = viewContainerFrame
     }
 
     @objc func selectTab(sender: TabItem) {
@@ -175,21 +176,27 @@ final class TabItem: UIButton {
 
     override func layoutSubviews() {
         // Close button
-        closeButton.frame.origin.x = horizontalMargin
-        closeButton.frame.origin.y = (tabHeight - closeButton.frame.height) / 2
+        var closeButtonFrame = closeButton.frame
+        closeButtonFrame.origin.x = horizontalMargin
+        closeButtonFrame.origin.y = (tabHeight - closeButtonFrame.height) / 2
+        closeButton.frame = closeButtonFrame
 
         // Title label
         if let titleLabel = titleLabel {
             let title = titleLabel.text ?? ""
             let font = titleLabel.font ?? .systemFont(ofSize: 12)
-            titleLabel.frame.size = NSAttributedString(string: title, attributes: [ .font: font ]).size()
-            titleLabel.frame.origin.x = closeButton.frame.width + horizontalMargin * 2
-            titleLabel.frame.origin.y = (tabHeight - titleLabel.frame.height) / 2.0
+            var titleLabelFrame = titleLabel.frame
+            titleLabelFrame.size = NSAttributedString(string: title, attributes: [ .font: font ]).size()
+            titleLabelFrame.origin.x = closeButton.frame.width + horizontalMargin * 2
+            titleLabelFrame.origin.y = (tabHeight - titleLabel.frame.height) / 2.0
+            titleLabel.frame = titleLabelFrame
         }
 
         // Self
-        frame.size.width = closeButton.frame.width + (titleLabel?.frame.width ?? 0.0) + horizontalMargin * 3.0 + 3.0
-        frame.size.height = tabHeight
+        var viewFrame = frame
+        viewFrame.size.width = closeButton.frame.width + (titleLabel?.frame.width ?? 0.0) + horizontalMargin * 3.0 + 3.0
+        viewFrame.size.height = tabHeight
+        frame = viewFrame
     }
 
     func set(title: String, font: UIFont, fontColor: UIColor) {
