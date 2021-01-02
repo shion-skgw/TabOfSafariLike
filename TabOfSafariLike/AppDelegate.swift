@@ -69,7 +69,7 @@ class ViewController: UIViewController {
 
     var num = 1
     @objc func adda() {
-        let tv = UITextView(frame: CGRect(x: 5, y: num * 2, width: 200, height: 100))
+        let tv = UITextView(frame: CGRect(x: 5, y: 5, width: 200, height: 100))
         tv.text = "\(num)"
         let vc = UIViewController()
         vc.view = tv

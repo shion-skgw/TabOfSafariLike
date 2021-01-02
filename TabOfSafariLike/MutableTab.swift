@@ -24,10 +24,8 @@ final class MutableTabController: UIViewController {
         super.viewDidLoad()
 
         let tabContainer = TabView()
-        tabContainer.showsVerticalScrollIndicator = false
-        tabContainer.showsHorizontalScrollIndicator = false
         tabContainer.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
-        tabContainer.tabContainer.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
+        tabContainer.container.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
         view.addSubview(tabContainer)
         self.tabContainer = tabContainer
 
@@ -42,6 +40,7 @@ final class MutableTabController: UIViewController {
 
         tabContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
         tabContainer.frame.size.height = tabHeight
+        tabContainer.container.frame.size.height = tabHeight
 
         viewContainer.frame = CGRect(origin: .zero, size: view.bounds.size)
         viewContainer.frame.origin.y += tabHeight
@@ -98,31 +97,35 @@ final class MutableTabController: UIViewController {
 
 final class TabView: UIScrollView {
 
-    private(set) weak var tabContainer: UIStackView!
+    private(set) weak var container: UIStackView!
 
     var tabItems: [TabItem] {
-        tabContainer.subviews.compactMap({ $0 as? TabItem })
+        container.subviews.compactMap({ $0 as? TabItem })
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         // Initialize UIStackView
-        let tabContainer = UIStackView(frame: .zero)
-        tabContainer.distribution = .fill
-        tabContainer.axis = .horizontal
-        tabContainer.alignment = .center
-        tabContainer.spacing = 1
-        tabContainer.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(tabContainer)
-        self.tabContainer = tabContainer
+        let container = UIStackView(frame: .zero)
+        container.distribution = .fill
+        container.axis = .horizontal
+        container.alignment = .center
+        container.spacing = 1
+        container.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(container)
+        self.container = container
 
         // Layout anchor setting
-        self.topAnchor.constraint(equalTo: tabContainer.topAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: tabContainer.heightAnchor).isActive = true
+        self.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
+        self.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: container.leadingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: container.trailingAnchor).isActive = true
+        self.heightAnchor.constraint(equalTo: container.heightAnchor).isActive = true
+
+        // Scroll indicator setting
+        self.showsVerticalScrollIndicator = false
+        self.showsHorizontalScrollIndicator = false
     }
 
     required init?(coder: NSCoder) {
@@ -130,11 +133,11 @@ final class TabView: UIScrollView {
     }
 
     func add(item: TabItem) {
-        tabContainer.addArrangedSubview(item)
+        container.addArrangedSubview(item)
     }
 
     func remove(item: TabItem) {
-        tabContainer.removeArrangedSubview(item)
+        container.removeArrangedSubview(item)
         item.removeFromSuperview()
     }
 
