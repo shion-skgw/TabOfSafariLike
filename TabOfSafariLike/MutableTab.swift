@@ -81,10 +81,10 @@ final class MutableTabController: UIViewController {
         viewController.didMove(toParent: self)
 
         // Add tab
-        let tabItem = TabItem(frame: .zero)
+        let a = CGRect(origin: .zero, size: CGSize(width: 100, height: 28))
+        let tabItem = TabItem(frame: a)
         tabItem.set(title: title, font: .systemFont(ofSize: UIFont.systemFontSize), fontColor: .black)
         tabItem.set(active: UIColor(white: 0.5, alpha: 1.0), inactive: UIColor(white: 0.3, alpha: 1.0))
-        tabItem.set(tabHeight: tabHeight)
         tabItem.set(tagNumber: tagNumber)
         tabItem.addTarget(self, action: #selector(selectTab(sender:)), for: .touchUpInside)
         tabItem.closeButton.addTarget(self, action: #selector(closeTab(sender:)), for: .touchUpInside)
@@ -112,7 +112,7 @@ final class TabView: UIScrollView {
         container.distribution = .fill
         container.axis = .horizontal
         container.alignment = .center
-        container.spacing = 1
+        container.spacing = 0
         container.translatesAutoresizingMaskIntoConstraints = false
         addSubview(container)
         self.container = container
@@ -146,8 +146,6 @@ final class TabView: UIScrollView {
 
 final class TabItem: UIButton {
 
-    private let horizontalMargin: CGFloat = 6
-    private var tabHeight: CGFloat = UIFont.systemFontSize * 2
     private var activeColor: UIColor = .white
     private var inactiveColor: UIColor = .white
     private(set) weak var closeButton: UIButton!
@@ -165,38 +163,30 @@ final class TabItem: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        // Initialize close button
         let closeButton = UIButton(type: .close)
+        closeButton.frame.origin.x = (frame.height - closeButton.frame.width) / 2
+        closeButton.frame.origin.y = (frame.height - closeButton.frame.height) / 2
         self.addSubview(closeButton)
         self.closeButton = closeButton
+
+        // Layout title label
+        var titleLabelFrame = CGRect.zero
+        titleLabelFrame.size.height = frame.height
+        titleLabelFrame.size.width = frame.width - frame.height
+        titleLabelFrame.origin.x = frame.height
+        self.titleLabel?.frame = titleLabelFrame
+        self.titleLabel?.textAlignment = .center
+
+        // Design setting
+        self.layer.borderWidth = 0.5
+        self.layer.borderColor = UIColor.darkGray.cgColor
+        self.layer.cornerRadius = 3
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        // Close button
-        var closeButtonFrame = closeButton.frame
-        closeButtonFrame.origin.x = horizontalMargin
-        closeButtonFrame.origin.y = (tabHeight - closeButtonFrame.height) / 2
-        closeButton.frame = closeButtonFrame
-
-        // Title label
-        if let titleLabel = titleLabel {
-            let title = titleLabel.text ?? ""
-            let font = titleLabel.font ?? .systemFont(ofSize: 12)
-            var titleLabelFrame = titleLabel.frame
-            titleLabelFrame.size = NSAttributedString(string: title, attributes: [ .font: font ]).size()
-            titleLabelFrame.origin.x = closeButton.frame.width + horizontalMargin * 2
-            titleLabelFrame.origin.y = (tabHeight - titleLabel.frame.height) / 2.0
-            titleLabel.frame = titleLabelFrame
-        }
-
-        // Self
-        var viewFrame = frame
-        viewFrame.size.width = closeButton.frame.width + (titleLabel?.frame.width ?? 0.0) + horizontalMargin * 3.0 + 3.0
-        viewFrame.size.height = tabHeight
-        frame = viewFrame
     }
 
     func set(title: String, font: UIFont, fontColor: UIColor) {
@@ -212,10 +202,6 @@ final class TabItem: UIButton {
         self.activeColor = active
         self.inactiveColor = inactive
         self.backgroundColor = isActive ? active : inactive
-    }
-
-    func set(tabHeight: CGFloat) {
-        self.tabHeight = tabHeight
     }
 
     func set(tagNumber: Int) {
