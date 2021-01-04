@@ -112,7 +112,7 @@ final class TabView: UIScrollView {
         container.distribution = .fill
         container.axis = .horizontal
         container.alignment = .center
-        container.spacing = 0
+        container.spacing = 0.0
         container.translatesAutoresizingMaskIntoConstraints = false
         addSubview(container)
         self.container = container
@@ -165,8 +165,8 @@ final class TabItem: UIButton {
 
         // Initialize close button
         let closeButton = UIButton(type: .close)
-        closeButton.frame.origin.x = (frame.height - closeButton.frame.width) / 2
-        closeButton.frame.origin.y = (frame.height - closeButton.frame.height) / 2
+        closeButton.frame.origin.x = (frame.height - closeButton.frame.width) / 2.0
+        closeButton.frame.origin.y = (frame.height - closeButton.frame.height) / 2.0
         self.addSubview(closeButton)
         self.closeButton = closeButton
 
@@ -181,7 +181,7 @@ final class TabItem: UIButton {
         // Design setting
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.darkGray.cgColor
-        self.layer.cornerRadius = 3
+        self.layer.cornerRadius = 3.0
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
